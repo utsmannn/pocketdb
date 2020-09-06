@@ -22,16 +22,6 @@ class PocketCollection(private val name: String) : Application() {
         )
     }
 
-    fun <T> remove(key: String, data: T, predicate: (T) -> Boolean) = run {
-        val defaultData = DefaultCollection(emptyList(), object : TypeToken<Collection<T>>() {})
-        //val defaultData = DefaultRow(data, object : TypeToken<T>() {})
-        PocketPreferences(key, pocketDb.pref(name), gson, pocketDb.getKey()).removeCollectionItem(
-            data,
-            defaultData.getType(),
-            predicate
-        )
-    }
-
     fun <T> insertAll(key: String, data: Collection<T>) = run {
         val defaultData = DefaultCollection(emptyList(), object : TypeToken<Collection<T>>() {})
         PocketPreferences(key, pocketDb.pref(name), gson, pocketDb.getKey()).insertCollections(

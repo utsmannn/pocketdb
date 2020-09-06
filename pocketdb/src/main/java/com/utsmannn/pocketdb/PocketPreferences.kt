@@ -39,12 +39,10 @@ internal class PocketPreferences(
         dispatcher: CoroutineContext = Dispatchers.Default
     ): Flow<String?> {
         val flow: Flow<String?> = channelFlow {
-            logi("offer --> ${getString(key, default)}")
             offer(getString(key, default.encrypt(secret))?.decrypt(secret))
 
             val listener = SharedPreferences.OnSharedPreferenceChangeListener { _, k ->
                 if (key == k) {
-                    logi("changed --> ${getString(key, default)}")
                     offer(getString(key, default.encrypt(secret))?.decrypt(secret))
                 }
             }
@@ -70,7 +68,6 @@ internal class PocketPreferences(
     internal fun <T> select(default: T, type: Type): Flow<T?> {
         return pref.observeKey(default.convertToString(gson)).map {
             return@map try {
-                logi("mmmm -> $it")
                 gson.fromJson<T>(it, type)
             } catch (e: JsonSyntaxException) {
                 throw IllegalArgumentException("Wrong key of existing data, key of data: $key")
@@ -87,7 +84,6 @@ internal class PocketPreferences(
         val defaultString = gson.toJson(default, type).encrypt(secret)
         val stringRaw = pref.getString(key, defaultString)?.decrypt(secret)
         return try {
-            logi("raw => $stringRaw")
             gson.fromJson<T>(stringRaw, type)
         } catch (e: JsonSyntaxException) {
             e.printStackTrace()
@@ -114,12 +110,9 @@ internal class PocketPreferences(
     internal fun <T> selectCollection(default: Collection<T>?, type: Type): Flow<Collection<T>> {
         val defaultString = gson.toJson(default, type)
         return pref.observeKey(defaultString).map {
-            logi("key is -> $key")
-            logi("observing list ----> $it")
             return@map try {
                 gson.fromJson<Collection<T>>(it, type)
             } catch (e: JsonSyntaxException) {
-                logi("taee")
                 e.printStackTrace()
                 throw IllegalArgumentException("Wrong key of existing data, key of data: $key")
             }
@@ -133,30 +126,6 @@ internal class PocketPreferences(
         }
         val stringCollection = gson.toJson(newCollection, type).encrypt(secret)
         pref.edit().putString(key, stringCollection).apply()
-        logi("inserting -> $currentCollection")
-    }
-
-    internal fun <T> removeCollectionItem(data: T, type: Type, predicate: (T) -> Boolean) {
-        val currentCollection = selectSingleCollection<T>(type)
-        val newCollection = currentCollection.toMutableList().apply {
-            logi("cuuuuuuuk -> $this")
-            val dataFound = this.find(predicate)
-            logi("data found --> $dataFound")
-            remove(dataFound)
-
-            //remove(data)
-            /*val dataString = data.convertToString(gson)
-            val stringData = gson.toJson(data, type)*/
-            //logi("collection ---> $this -- data ---> $stringData")
-            /*if (contains(data)) {
-                logi("contains data, removing....")
-                remove(data)
-            } else {
-                logi("not contains")
-            }*/
-        }
-        val stringCollection = gson.toJson(newCollection, type).encrypt(secret)
-        pref.edit().putString(key, stringCollection).apply()
     }
 
     internal fun <T> insertCollections(data: Collection<T>, type: Type) {
@@ -166,7 +135,6 @@ internal class PocketPreferences(
         }
         val stringCollection = gson.toJson(newCollection, type).encrypt(secret)
         pref.edit().putString(key, stringCollection).apply()
-        logi("inserting -> $currentCollection")
     }
 
     // ------ END OF COLLECTION ------ //
