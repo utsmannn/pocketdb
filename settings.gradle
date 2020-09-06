@@ -1,0 +1,3 @@
+include ':pocketdb'
+include ':app'
+rootProject.name = "PocketDb"
