@@ -3,6 +3,7 @@ package com.utsmannn.pocketdb.kind
 import android.app.Application
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.utsmannn.pocketdb.InsertStrategy
 import com.utsmannn.pocketdb.PocketDb
 import com.utsmannn.pocketdb.PocketPreferences
 import com.utsmannn.pocketdb.default_model.DefaultCollection
@@ -14,19 +15,21 @@ class PocketCollection(private val name: String) : Application() {
     private val pocketDb: PocketDb by inject()
     private val gson: Gson by inject()
 
-    fun <T> insert(key: String, data: T) = run {
+    fun <T> insert(key: String, data: T, insertStrategy: InsertStrategy = InsertStrategy.Ignore) = run {
         val defaultData = DefaultCollection(emptyList(), object : TypeToken<Collection<T>>() {})
         PocketPreferences(key, pocketDb.pref(name), gson, pocketDb.getKey()).insertCollectionItem(
             data,
-            defaultData.getType()
+            defaultData.getType(),
+            insertStrategy
         )
     }
 
-    fun <T> insertAll(key: String, data: Collection<T>) = run {
+    fun <T> insertAll(key: String, data: Collection<T>, insertStrategy: InsertStrategy = InsertStrategy.Ignore) = run {
         val defaultData = DefaultCollection(emptyList(), object : TypeToken<Collection<T>>() {})
         PocketPreferences(key, pocketDb.pref(name), gson, pocketDb.getKey()).insertCollections(
             data,
-            defaultData.getType()
+            defaultData.getType(),
+            insertStrategy
         )
     }
 

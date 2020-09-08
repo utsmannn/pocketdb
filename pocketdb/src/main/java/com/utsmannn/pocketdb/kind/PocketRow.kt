@@ -2,6 +2,7 @@ package com.utsmannn.pocketdb.kind
 
 import android.app.Application
 import com.google.gson.Gson
+import com.utsmannn.pocketdb.InsertStrategy
 import com.utsmannn.pocketdb.PocketDb
 import com.utsmannn.pocketdb.PocketPreferences
 import com.utsmannn.pocketdb.default_model.DefaultRow
@@ -12,8 +13,8 @@ class PocketRow(private val name: String) : Application() {
     private val pocketDb: PocketDb by inject()
     private val gson: Gson by inject()
 
-    fun <T> insert(key: String, data: T) = run {
-        PocketPreferences(key, pocketDb.pref(name), gson, pocketDb.getKey()).insert(data)
+    fun <T> insert(key: String, data: T, insertStrategy: InsertStrategy = InsertStrategy.Ignore) = run {
+        PocketPreferences(key, pocketDb.pref(name), gson, pocketDb.getKey()).insert(data, insertStrategy)
     }
 
     fun <T> flowOf(key: String, defaultRow: DefaultRow<T>): Flow<T?> = run {

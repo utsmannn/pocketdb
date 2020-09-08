@@ -9,6 +9,7 @@ import com.utsmannn.pocketdb.extensions.encrypt
 import com.utsmannn.pocketdb.extensions.logi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.flowOn
@@ -57,8 +58,17 @@ internal class PocketPreferences(
     /**
      * insert item to preferences
      * */
-    internal fun <T> insert(data: T) =
-        pref.edit().putString(key, data.convertToString(gson).encrypt(secret)).apply()
+    internal fun <T> insert(data: T, strategy: InsertStrategy) {
+        when (strategy) {
+            is InsertStrategy.Override -> {
+                pref.edit().remove(key).apply()
+                pref.edit().putString(key, data.convertToString(gson).encrypt(secret)).apply()
+            }
+            is InsertStrategy.Ignore -> {
+                pref.edit().putString(key, data.convertToString(gson).encrypt(secret)).apply()
+            }
+        }
+    }
 
     /**
      * observing value with flow preferences
@@ -119,22 +129,39 @@ internal class PocketPreferences(
         }
     }
 
-    internal fun <T> insertCollectionItem(data: T, type: Type) {
+    internal fun <T> insertCollectionItem(data: T, type: Type, strategy: InsertStrategy) {
         val currentCollection = selectSingleCollection<T>(type)
         val newCollection = currentCollection.toMutableList().apply {
             add(data)
         }
         val stringCollection = gson.toJson(newCollection, type).encrypt(secret)
-        pref.edit().putString(key, stringCollection).apply()
+
+        when (strategy) {
+            is InsertStrategy.Override -> {
+                pref.edit().remove(key).apply()
+                pref.edit().putString(key, stringCollection).apply()
+            }
+            is InsertStrategy.Ignore -> {
+                pref.edit().putString(key, stringCollection).apply()
+            }
+        }
     }
 
-    internal fun <T> insertCollections(data: Collection<T>, type: Type) {
+    internal fun <T> insertCollections(data: Collection<T>, type: Type, strategy: InsertStrategy) {
         val currentCollection = selectSingleCollection<T>(type)
         val newCollection = currentCollection.toMutableList().apply {
             addAll(data)
         }
         val stringCollection = gson.toJson(newCollection, type).encrypt(secret)
-        pref.edit().putString(key, stringCollection).apply()
+        when (strategy) {
+            is InsertStrategy.Override -> {
+                pref.edit().remove(key).apply()
+                pref.edit().putString(key, stringCollection).apply()
+            }
+            is InsertStrategy.Ignore -> {
+                pref.edit().putString(key, stringCollection).apply()
+            }
+        }
     }
 
     // ------ END OF COLLECTION ------ //

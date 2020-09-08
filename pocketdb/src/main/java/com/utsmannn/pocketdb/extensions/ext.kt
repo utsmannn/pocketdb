@@ -14,8 +14,20 @@ import kotlinx.coroutines.launch
 
 fun logi(msg: String) = Log.i("pocket_logger", msg)
 
-inline fun <reified T> Flow<T>.listen(crossinline data: (T) -> Unit) {
-    GlobalScope.launch {
+inline fun <reified T> Flow<T>.listen(scope: CoroutineScope = GlobalScope, crossinline data: (T) -> Unit) {
+    scope.launch {
+        collect {
+            try {
+                data.invoke(it)
+            } catch (e: ClassCastException) {
+                throw IllegalArgumentException("Value cannot handle with ${T::class.java.name}")
+            }
+        }
+    }
+}
+
+inline fun <reified T> Flow<T>.listenOnUi(scope: CoroutineScope = GlobalScope, crossinline data: (T) -> Unit) {
+    scope.launch {
         collect {
             CoroutineScope(Dispatchers.Main).launch {
                 try {
