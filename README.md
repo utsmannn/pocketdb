@@ -133,6 +133,16 @@ Pocket.collection("users")...
 
 ---
 
+### Table of function
+| Function | Row | Collection |
+| --- | --- | --- |
+| `insert` | yes | yes |
+| `insertAll` | no | yes |
+| `flowOf` | yes | yes |
+| `selectOf` | yes | yes |
+| `destroy` | yes | yes |
+| `keys` | yes | yes |
+
 ```
 Copyright 2020 Muhammad Utsman
 

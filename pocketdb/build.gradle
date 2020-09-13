@@ -11,7 +11,7 @@ ext {
     artifact = 'pocketdb'
 
     publishedGroupId = 'com.utsman.pocket'
-    libraryVersion = '1.0.10'
+    libraryVersion = '1.0.11'
 
     libraryDescription = 'Lightweight library for local database noSQL base on shared preferences'
     siteUrl = 'https://github.com/utsmannn/pocketdb'
@@ -22,7 +22,6 @@ ext {
     licenseName = 'The Apache Software License, Version 2.0'
     licenseUrl = 'https://www.apache.org/licenses/LICENSE-2.0.txt'
     allLicenses = ["Apache-2.0"]
-
 }
 
 android {
@@ -33,7 +32,7 @@ android {
         minSdkVersion 16
         targetSdkVersion 29
         versionCode 1
-        versionName "1.0.10"
+        versionName libraryVersion
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
