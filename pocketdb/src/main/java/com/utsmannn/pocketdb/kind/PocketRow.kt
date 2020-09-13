@@ -6,6 +6,7 @@ import com.utsmannn.pocketdb.InsertStrategy
 import com.utsmannn.pocketdb.PocketDb
 import com.utsmannn.pocketdb.PocketPreferences
 import com.utsmannn.pocketdb.default_model.DefaultRow
+import com.utsmannn.pocketdb.extensions.decrypt
 import com.utsmannn.pocketdb.extensions.encrypt
 import kotlinx.coroutines.flow.Flow
 import org.koin.android.ext.android.inject
@@ -34,5 +35,9 @@ class PocketRow(private val name: String) : Application() {
 
     fun destroy(key: String = "") = run {
         PocketPreferences(key.encrypt(pocketDb.getSecretKey()), pocketDb.pref(name), gson, pocketDb.getSecretKey()).clear()
+    }
+
+    fun keys(): List<String> = run {
+        pocketDb.pref(name).all.keys.toList().map { it.decrypt(pocketDb.getSecretKey()) }
     }
 }

@@ -37,8 +37,12 @@ class MainActivity : AppCompatActivity() {
         Pocket.collection("tae")
             .flowOf("sample", default)
             .listenOnUi {
-                tx_log.text = it.toString()
+                //tx_log.text = it.toString()
             }
+
+        val allKeys = Pocket.collection("tae")
+            .keys()
+        tx_log.text = allKeys.toString()
 
         val defaultD = defaultOf(simpleData)
         //Pocket.row("nn").insert("key", simpleData)

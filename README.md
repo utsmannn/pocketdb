@@ -97,18 +97,18 @@ val default = defaultOf(User("sarah")) // default
 val data = Pocket.row("user").selectOf("utsman", default)
 ```
 
-For need observe changes data, I use `flowOf` and call from coroutine scope or use `.listen`
+For need observe changes data, I use `flowOf` and call from coroutine scope or use `.listenOnUi` for observing in ui thread
 ```kotlin
 Pocket.row("user")
     .flowOf("utsman", default)
-    .listen { data ->
+    .listenOnUi { data ->
          // observing data changes here
      }
 
 // or
 GlobalScope.launch {
     Pocket.row("user")
-        .flowOf("key", defaultD)
+        .flowOf("key", default)
         .collect {
             // observing data changes here
         }

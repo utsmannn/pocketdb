@@ -11,7 +11,7 @@ ext {
     artifact = 'pocketdb'
 
     publishedGroupId = 'com.utsman.pocket'
-    libraryVersion = '1.0.9'
+    libraryVersion = '1.0.10'
 
     libraryDescription = 'Lightweight library for local database noSQL base on shared preferences'
     siteUrl = 'https://github.com/utsmannn/pocketdb'
@@ -33,7 +33,7 @@ android {
         minSdkVersion 16
         targetSdkVersion 29
         versionCode 1
-        versionName "1.0.9"
+        versionName "1.0.10"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
