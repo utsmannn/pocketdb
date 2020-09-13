@@ -7,7 +7,7 @@ import com.utsmannn.pocketdb.InsertStrategy
 import com.utsmannn.pocketdb.PocketDb
 import com.utsmannn.pocketdb.PocketPreferences
 import com.utsmannn.pocketdb.default_model.DefaultCollection
-import com.utsmannn.pocketdb.default_model.DefaultRow
+import com.utsmannn.pocketdb.extensions.encrypt
 import kotlinx.coroutines.flow.Flow
 import org.koin.android.ext.android.inject
 
@@ -17,7 +17,7 @@ class PocketCollection(private val name: String) : Application() {
 
     fun <T> insert(key: String, data: T, insertStrategy: InsertStrategy = InsertStrategy.Ignore) = run {
         val defaultData = DefaultCollection(emptyList(), object : TypeToken<Collection<T>>() {})
-        PocketPreferences(key, pocketDb.pref(name), gson, pocketDb.getKey()).insertCollectionItem(
+        PocketPreferences(key.encrypt(pocketDb.getSecretKey()), pocketDb.pref(name), gson, pocketDb.getSecretKey()).insertCollectionItem(
             data,
             defaultData.getType(),
             insertStrategy
@@ -26,7 +26,7 @@ class PocketCollection(private val name: String) : Application() {
 
     fun <T> insertAll(key: String, data: Collection<T>, insertStrategy: InsertStrategy = InsertStrategy.Ignore) = run {
         val defaultData = DefaultCollection(emptyList(), object : TypeToken<Collection<T>>() {})
-        PocketPreferences(key, pocketDb.pref(name), gson, pocketDb.getKey()).insertCollections(
+        PocketPreferences(key.encrypt(pocketDb.getSecretKey()), pocketDb.pref(name), gson, pocketDb.getSecretKey()).insertCollections(
             data,
             defaultData.getType(),
             insertStrategy
@@ -34,19 +34,21 @@ class PocketCollection(private val name: String) : Application() {
     }
 
     fun <T> flowOf(key: String, default: DefaultCollection<T>): Flow<Collection<T?>> = run {
-        PocketPreferences(key, pocketDb.pref(name), gson, pocketDb.getKey()).selectCollection(
+        PocketPreferences(key.encrypt(pocketDb.getSecretKey()), pocketDb.pref(name), gson, pocketDb.getSecretKey()).selectCollection(
             default.getDefault(),
             default.getType()
         )
     }
 
     fun <T> selectOf(key: String, default : DefaultCollection<T>): Collection<T> = run {
-        PocketPreferences(key, pocketDb.pref(name), gson, pocketDb.getKey()).selectSingleCollection(
+        PocketPreferences(key.encrypt(pocketDb.getSecretKey()), pocketDb.pref(name), gson, pocketDb.getSecretKey()).selectSingleCollection(
             default.getType()
         )
     }
 
     fun destroy(key: String = "") = run {
-        PocketPreferences(key, pocketDb.pref(name), gson, pocketDb.getKey()).clear(key)
+        PocketPreferences(key.encrypt(pocketDb.getSecretKey()), pocketDb.pref(name), gson, pocketDb.getSecretKey()).clear()
     }
+
+
 }

@@ -3,6 +3,7 @@ package com.utsmannn.pocketdb
 import android.content.Context
 import android.content.SharedPreferences
 import com.google.gson.Gson
+import com.utsmannn.pocketdb.extensions.encrypt
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.KoinApplication
 import org.koin.core.context.startKoin
@@ -34,8 +35,11 @@ internal class PocketDb(private val context: Context, private var key: String) {
         }
     }
 
-    fun pref(identifier: String = "default"): SharedPreferences =
-        context.getSharedPreferences("pocket_$identifier", Context.MODE_PRIVATE)
+    private fun String.fixIllegalChar() = replace("/", "")
+        .replace("\\", "")
 
-    fun getKey() = key
+    fun pref(identifier: String = "default"): SharedPreferences =
+        context.getSharedPreferences(identifier.encrypt(key).fixIllegalChar(), Context.MODE_PRIVATE)
+
+    fun getSecretKey() = key
 }

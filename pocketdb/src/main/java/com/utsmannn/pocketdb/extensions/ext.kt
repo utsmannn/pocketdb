@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
-fun logi(msg: String) = Log.i("pocket_logger", msg)
+internal fun logi(msg: String) = Log.i("pocket_logger", msg)
 
 inline fun <reified T> Flow<T>.listen(scope: CoroutineScope = GlobalScope, crossinline data: (T) -> Unit) {
     scope.launch {

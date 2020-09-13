@@ -164,17 +164,25 @@ internal class PocketPreferences(
         }
     }
 
+    internal fun removeItemCollection(data: Any, type: Type) {
+        logi("removing....")
+        val currentCollection = selectSingleCollection<Any>(type)
+            .toMutableList().apply {
+                remove(data)
+            }
+        insertCollections(currentCollection, type, InsertStrategy.Override)
+    }
+
     // ------ END OF COLLECTION ------ //
 
-    internal fun clear(key: String = "") {
+    internal fun clear() {
         val allKeys = pref.all.keys
-        if (key.isEmpty()) {
-            logi("clear ----------")
+        val keyDecrypt = key?.decrypt(secret)
+        if (keyDecrypt.isNullOrEmpty()) {
             allKeys.forEach {
                 pref.edit().remove(it).apply()
             }
         } else {
-            logi("remove ----------")
             pref.edit().remove(key).apply()
         }
     }

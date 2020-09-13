@@ -1,6 +1,7 @@
 package com.utsmannn.pocketdb.app
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.utsmannn.pocketdb.InsertStrategy
 import com.utsmannn.pocketdb.Pocket
@@ -17,6 +18,8 @@ class MainActivity : AppCompatActivity() {
         var list: MutableList<String> = mutableListOf()
     )
 
+    fun logi(msg: String) = Log.i("pocket_logger_sample", msg)
+
     @ExperimentalCoroutinesApi
     @InternalCoroutinesApi
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,16 +34,16 @@ class MainActivity : AppCompatActivity() {
         list.add(simpleData)
 
         val default = defaultCollectionOf(emptyList<SampleData>())
-        /*Pocket.collection("oke-collection")
+        Pocket.collection("tae")
             .flowOf("sample", default)
-            .listen {
+            .listenOnUi {
                 tx_log.text = it.toString()
-            }*/
+            }
 
         val defaultD = defaultOf(simpleData)
         //Pocket.row("nn").insert("key", simpleData)
 
-        GlobalScope.launch {
+        /*GlobalScope.launch {
             Pocket.row("bbb").flowOf("key", defaultD)
                 .collect {
                     CoroutineScope(Dispatchers.Main).launch {
@@ -50,7 +53,7 @@ class MainActivity : AppCompatActivity() {
                     }
 
                 }
-        }
+        }*/
 
         /*GlobalScope.launch {
             Pocket.row("bb")
@@ -65,7 +68,9 @@ class MainActivity : AppCompatActivity() {
         //Pocket.row("nn").selectOf()
 
         btn_add.setOnClickListener {
-            Pocket.row("bbb").insert("key", simpleData, InsertStrategy.Ignore)
+            //Pocket.row("bbb").insert("key", simpleData, InsertStrategy.Override)
+            Pocket.collection("tae")
+                .insert("sample", simpleData)
         }
 
         btn_remove.setOnClickListener {
@@ -78,7 +83,21 @@ class MainActivity : AppCompatActivity() {
                 .insertAll("sample", currentList)*/
 
             //Pocket.row("bbb").insert("key", simpleData, InsertStrategy.Override)
-            Pocket.row("bbb").destroy("key")
+            //Pocket.row("bbb").destroy("key")
+            /*val editedList = Pocket.collection("oke-collection-sample")
+                .selectOf("sample-2", defaultCollectionOf(emptyList<SampleData>()))
+                .toMutableList()
+                .apply {
+                    remove(simpleData)
+                }
+
+            Pocket.collection("oke-collection-sample")
+                .destroy("sample")
+            Pocket.collection("oke-collection-sample")
+                .insertAll("sample", editedList)*/
+
+            /*Pocket.collection("oke-collection-sample")
+                .destroy()*/
         }
     }
 }

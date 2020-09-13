@@ -8,6 +8,7 @@
 
 <p align="center">
   <a href="LICENSE"><img alt="License" src="https://img.shields.io/badge/License-Apache%202.0-blue.svg"></a>
+  <a href="https://bintray.com/kucingapes/utsman/com.utsman.pocket/1.0.9"><img alt="Bintray" src="https://api.bintray.com/packages/kucingapes/utsman/com.utsman.pocket/images/download.svg"></a>
   <a href="https://github.com/utsmannn/pocketdb/pulls"><img alt="Pull request" src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat"></a>
   <a href="https://developer.android.com/kotlin"><img alt="Fcm docs" src="https://img.shields.io/badge/Kotlin-Coroutine-orange?logo=kotlin&style=flat"></a>
   <a href="https://twitter.com/utsmannn"><img alt="Twitter" src="https://img.shields.io/twitter/follow/utsmannn"></a>
@@ -18,6 +19,9 @@
 ---
 
 This is SharedPreferences Helper like a database noSql. Support AES encryption
+
+## Latest Version
+[ ![Download](https://api.bintray.com/packages/kucingapes/utsman/com.utsman.pocket/images/download.svg) ](https://bintray.com/kucingapes/utsman/com.utsman.pocket/_latestVersion)
 
 ## Download
 ```groovy
@@ -38,7 +42,7 @@ dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.8'
 
     // add this library
-    implementation 'com.utsman.pocket:pocketdb:1.0.8'
+    implementation "com.utsman.pocket:pocketdb:$latest-version"
 }
 ```
 
