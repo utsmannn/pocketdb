@@ -164,15 +164,6 @@ internal class PocketPreferences(
         }
     }
 
-    internal fun removeItemCollection(data: Any, type: Type) {
-        logi("removing....")
-        val currentCollection = selectSingleCollection<Any>(type)
-            .toMutableList().apply {
-                remove(data)
-            }
-        insertCollections(currentCollection, type, InsertStrategy.Override)
-    }
-
     // ------ END OF COLLECTION ------ //
 
     internal fun clear() {
