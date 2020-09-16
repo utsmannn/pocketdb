@@ -11,7 +11,7 @@ ext {
     artifact = 'pocketdb'
 
     publishedGroupId = 'com.utsman.pocket'
-    libraryVersion = '1.0.11'
+    libraryVersion = '1.0.12'
 
     libraryDescription = 'Lightweight library for local database noSQL base on shared preferences'
     siteUrl = 'https://github.com/utsmannn/pocketdb'

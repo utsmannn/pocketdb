@@ -16,28 +16,28 @@ class PocketRow(private val name: String) : Application() {
     private val gson: Gson by inject()
 
     fun <T> insert(key: String, data: T, insertStrategy: InsertStrategy = InsertStrategy.Ignore) = run {
-        PocketPreferences(key.encrypt(pocketDb.getSecretKey()), pocketDb.pref(name), gson, pocketDb.getSecretKey()).insert(data, insertStrategy)
+        PocketPreferences(key, pocketDb.pref(name), gson, pocketDb.getSecretKey()).insert(data, insertStrategy)
     }
 
     fun <T> flowOf(key: String, defaultRow: DefaultRow<T>): Flow<T?> = run {
-        PocketPreferences(key.encrypt(pocketDb.getSecretKey()), pocketDb.pref(name), gson, pocketDb.getSecretKey()).select(
+        PocketPreferences(key, pocketDb.pref(name), gson, pocketDb.getSecretKey()).select(
             defaultRow.getDefault(),
             defaultRow.getType()
         )
     }
 
     fun <T> selectOf(key: String, defaultRow: DefaultRow<T>): T? = run {
-        PocketPreferences(key.encrypt(pocketDb.getSecretKey()), pocketDb.pref(name), gson, pocketDb.getSecretKey()).selectSingle(
+        PocketPreferences(key, pocketDb.pref(name), gson, pocketDb.getSecretKey()).selectSingle(
             defaultRow.getDefault(),
             defaultRow.getType()
         )
     }
 
     fun destroy(key: String = "") = run {
-        PocketPreferences(key.encrypt(pocketDb.getSecretKey()), pocketDb.pref(name), gson, pocketDb.getSecretKey()).clear()
+        PocketPreferences(key, pocketDb.pref(name), gson, pocketDb.getSecretKey()).clear()
     }
 
     fun keys(): List<String> = run {
-        pocketDb.pref(name).all.keys.toList().map { it.decrypt(pocketDb.getSecretKey()) }
+        pocketDb.pref(name).all.keys.toList()
     }
 }
